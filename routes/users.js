@@ -9,8 +9,8 @@ router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1
 
     try {
-        const userCount = await Post.find().count();
-        const users = await Post.find()
+        const userCount = await User.find().count();
+        const users = await User.find()
             .skip(start)
             .limit(limit);
         res.json({
