@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
 
-const PostSchema = mongoose.Schema({
+const AlbumSchema = mongoose.Schema({
     _id: Number,
     title: {
-        type: String,
-        required: true
-    },
-    body: {
         type: String,
         required: true
     },
@@ -16,4 +12,4 @@ const PostSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Post', PostSchema)
+module.exports = mongoose.model('Album', AlbumSchema)

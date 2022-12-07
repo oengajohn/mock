@@ -1,19 +1,23 @@
 const mongoose = require('mongoose');
 
-const PostSchema = mongoose.Schema({
+const PhotoSchema = mongoose.Schema({
     _id: Number,
     title: {
         type: String,
         required: true
     },
-    body: {
+    url: {
         type: String,
         required: true
     },
-    userId: {
+    thumbnailUrl: {
+        type: String,
+        required: true
+    },
+    albumId: {
         type: Number,
         required: true
     }
 });
 
-module.exports = mongoose.model('Post', PostSchema)
+module.exports = mongoose.model('Photo', PhotoSchema)

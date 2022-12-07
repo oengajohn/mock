@@ -1,22 +1,20 @@
 const express = require('express');
-const Post = require('../model/Post');
+const Comment = require('../model/Comment');
 
 const router = express.Router()
 
-//GET ALL POSTS
 router.get('/', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const searchKey = req.query.searchKey;
-
     try {
-        const postCount = await Post.find().count();
-        const posts = await Post.find()
+        const totalCount = await Comment.find().count();
+        const rcords = await Comment.find()
             .skip(start)
             .limit(limit);
         res.json({
-            totalCount: postCount,
-            rows: posts,
+            totalCount: totalCount,
+            rows: rcords,
             success: true
         })
 
@@ -27,32 +25,32 @@ router.get('/', async (req, res) => {
         })
     }
 });
-//SAVE POST
 router.post('/seed/', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
-            data.forEach(async (post) => {
-                const postToBeSaved = await new Post({
-                    _id: post.id,
-                    title: post.title,
-                    body: post.body,
-                    userId: post.userId
+            data.forEach(async (record) => {
+                const objectToBeSaved = await new Comment({
+                    _id: record.id,
+                    email: record.title,
+                    name: record.name,
+                    body: record.body,
+                    userId: record.userId
                 });
-                const savedPost = await postToBeSaved.save()
+                await objectToBeSaved.save()
             });
             res.json({
                 success: true
             })
 
         } else {
-            const user = await new Post({
+            const record = await new Comment({
                 _id: data.id,
                 title: data.title,
                 body: data.body,
                 userId: data.userId
             });
-            await user.save()
+            await record.save()
             res.json({
                 success: true
             })
@@ -65,18 +63,17 @@ router.post('/seed/', async (req, res) => {
         })
     }
 
-
 });
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
-        const user = await new Post({
+        const record = await new Comment({
             _id: data.id,
             title: data.title,
             body: data.body,
             userId: data.userId
         });
-        await user.save()
+        await record.save()
         res.json({
             success: true
         })
@@ -87,13 +84,11 @@ router.post('/', async (req, res) => {
         })
     }
 });
-//SPECIFIC POST
-router.get('/:postId', async (req, res) => {
+router.get('/:commentId', async (req, res) => {
     try {
-        const post = await Post.findById(req.params.postId);
+        await Comment.findById(req.params.commentId);
         res.json({
-            success: true,
-            data: post,
+            success: true
         })
     } catch (err) {
         res.json({
@@ -102,16 +97,13 @@ router.get('/:postId', async (req, res) => {
         })
     }
 })
-
-//DELETE
-router.delete('/:postId', async (req, res) => {
+router.delete('/:commentId', async (req, res) => {
     try {
-        const removedPost = await Post.remove({
-            _id: req.params.postId
+        await Comment.remove({
+            _id: req.params.commentId
         });
         res.json({
-            success: true,
-            data: removedPost,
+            success: true
         })
     } catch (err) {
         res.json({
@@ -120,21 +112,20 @@ router.delete('/:postId', async (req, res) => {
         })
     }
 })
-//Update
-router.patch('/:postId', async (req, res) => {
+router.patch('/:commentId', async (req, res) => {
+    const data = req.body;
     try {
-        const data = req.body;
-        const updatedPost = await Post.updateOne({
-            _id: req.params.postId
+        await Comment.updateOne({
+            _id: req.params.commentId
         }, {
             $set: {
                 title: data.title,
-                description: data.description
+                body: data.body,
+                userId: data.userId
             }
         });
         res.json({
-            success: true,
-            data: updatedPost,
+            success: true
         })
     } catch (err) {
         res.json({

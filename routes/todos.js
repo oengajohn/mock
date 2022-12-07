@@ -1,22 +1,22 @@
 const express = require('express');
-const Post = require('../model/Post');
+const Todo = require('../model/Todo');
 
 const router = express.Router()
 
-//GET ALL POSTS
+
 router.get('/', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const searchKey = req.query.searchKey;
 
     try {
-        const postCount = await Post.find().count();
-        const posts = await Post.find()
+        const todoCount = await Todo.find().count();
+        const todos = await Todo.find()
             .skip(start)
             .limit(limit);
         res.json({
-            totalCount: postCount,
-            rows: posts,
+            totalCount: todoCount,
+            rows: todos,
             success: true
         })
 
@@ -27,32 +27,31 @@ router.get('/', async (req, res) => {
         })
     }
 });
-//SAVE POST
 router.post('/seed/', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
-            data.forEach(async (post) => {
-                const postToBeSaved = await new Post({
-                    _id: post.id,
-                    title: post.title,
-                    body: post.body,
-                    userId: post.userId
+            data.forEach(async (todo) => {
+                const todoToBeSaved = await new Todo({
+                    _id: todo.id,
+                    title: todo.title,
+                    completed: todo.completed,
+                    userId: todo.userId
                 });
-                const savedPost = await postToBeSaved.save()
+                await todoToBeSaved.save()
             });
             res.json({
                 success: true
             })
 
         } else {
-            const user = await new Post({
+            const todo = await new Todo({
                 _id: data.id,
                 title: data.title,
-                body: data.body,
+                completed: data.completed,
                 userId: data.userId
             });
-            await user.save()
+            await todo.save()
             res.json({
                 success: true
             })
@@ -70,13 +69,13 @@ router.post('/seed/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
-        const user = await new Post({
+        const todo = await new Todo({
             _id: data.id,
             title: data.title,
-            body: data.body,
+            completed: data.completed,
             userId: data.userId
         });
-        await user.save()
+        await todo.save()
         res.json({
             success: true
         })
@@ -87,13 +86,12 @@ router.post('/', async (req, res) => {
         })
     }
 });
-//SPECIFIC POST
-router.get('/:postId', async (req, res) => {
+router.get('/:todoId', async (req, res) => {
     try {
-        const post = await Post.findById(req.params.postId);
+        const todo = await Todo.findById(req.params.todoId);
         res.json({
             success: true,
-            data: post,
+            data: todo,
         })
     } catch (err) {
         res.json({
@@ -103,15 +101,14 @@ router.get('/:postId', async (req, res) => {
     }
 })
 
-//DELETE
-router.delete('/:postId', async (req, res) => {
+router.delete('/:todoId', async (req, res) => {
     try {
-        const removedPost = await Post.remove({
-            _id: req.params.postId
+        const removedTodo = await Todo.remove({
+            _id: req.params.todoId
         });
         res.json({
             success: true,
-            data: removedPost,
+            data: removedTodo,
         })
     } catch (err) {
         res.json({
@@ -120,21 +117,19 @@ router.delete('/:postId', async (req, res) => {
         })
     }
 })
-//Update
-router.patch('/:postId', async (req, res) => {
+router.patch('/:todoId', async (req, res) => {
     try {
-        const data = req.body;
-        const updatedPost = await Post.updateOne({
-            _id: req.params.postId
+        const updatedTodo = await Todo.updateOne({
+            _id: req.params.todoId
         }, {
             $set: {
-                title: data.title,
-                description: data.description
+                title: req.body.title,
+                compeleted: req.body.compeleted
             }
         });
         res.json({
             success: true,
-            data: updatedPost,
+            data: updatedTodo,
         })
     } catch (err) {
         res.json({
