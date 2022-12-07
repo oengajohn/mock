@@ -9,12 +9,12 @@ router.get('/', async (req, res) => {
     const searchKey = req.query.searchKey;
     try {
         const totalCount = await Comment.find().count();
-        const rcords = await Comment.find()
+        const records = await Comment.find()
             .skip(start)
             .limit(limit);
         res.json({
             totalCount: totalCount,
-            rows: rcords,
+            rows: records,
             success: true
         })
 
@@ -86,9 +86,10 @@ router.post('/', async (req, res) => {
 });
 router.get('/:commentId', async (req, res) => {
     try {
-        await Comment.findById(req.params.commentId);
+        const record = await Comment.findById(req.params.commentId);
         res.json({
-            success: true
+            success: true,
+            data: record
         })
     } catch (err) {
         res.json({
@@ -112,7 +113,7 @@ router.delete('/:commentId', async (req, res) => {
         })
     }
 })
-router.patch('/:commentId', async (req, res) => {
+router.put('/:commentId', async (req, res) => {
     const data = req.body;
     try {
         await Comment.updateOne({

@@ -10,13 +10,13 @@ router.get('/', async (req, res) => {
     const searchKey = req.query.searchKey;
 
     try {
-        const todoCount = await Todo.find().count();
-        const todos = await Todo.find()
+        const totalCount = await Todo.find().count();
+        const records = await Todo.find()
             .skip(start)
             .limit(limit);
         res.json({
-            totalCount: todoCount,
-            rows: todos,
+            totalCount: totalCount,
+            rows: records,
             success: true
         })
 
@@ -31,27 +31,27 @@ router.post('/seed/', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
-            data.forEach(async (todo) => {
-                const todoToBeSaved = await new Todo({
-                    _id: todo.id,
-                    title: todo.title,
-                    completed: todo.completed,
-                    userId: todo.userId
+            data.forEach(async (record) => {
+                const recordToBeSaved = await new Todo({
+                    _id: record.id,
+                    title: record.title,
+                    completed: record.completed,
+                    userId: record.userId
                 });
-                await todoToBeSaved.save()
+                await recordToBeSaved.save()
             });
             res.json({
                 success: true
             })
 
         } else {
-            const todo = await new Todo({
+            const recordToBeSaved = await new Todo({
                 _id: data.id,
                 title: data.title,
                 completed: data.completed,
                 userId: data.userId
             });
-            await todo.save()
+            await recordToBeSaved.save()
             res.json({
                 success: true
             })
@@ -69,13 +69,13 @@ router.post('/seed/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
-        const todo = await new Todo({
+        const recordToBeSaved = await new Todo({
             _id: data.id,
             title: data.title,
             completed: data.completed,
             userId: data.userId
         });
-        await todo.save()
+        await recordToBeSaved.save()
         res.json({
             success: true
         })
@@ -88,10 +88,10 @@ router.post('/', async (req, res) => {
 });
 router.get('/:todoId', async (req, res) => {
     try {
-        const todo = await Todo.findById(req.params.todoId);
+        const record = await Todo.findById(req.params.todoId);
         res.json({
             success: true,
-            data: todo,
+            data: record,
         })
     } catch (err) {
         res.json({
@@ -103,12 +103,11 @@ router.get('/:todoId', async (req, res) => {
 
 router.delete('/:todoId', async (req, res) => {
     try {
-        const removedTodo = await Todo.remove({
+        await Todo.remove({
             _id: req.params.todoId
         });
         res.json({
             success: true,
-            data: removedTodo,
         })
     } catch (err) {
         res.json({
@@ -117,19 +116,19 @@ router.delete('/:todoId', async (req, res) => {
         })
     }
 })
-router.patch('/:todoId', async (req, res) => {
+router.put('/:todoId', async (req, res) => {
     try {
-        const updatedTodo = await Todo.updateOne({
+        const data = req.body;
+        await Todo.updateOne({
             _id: req.params.todoId
         }, {
             $set: {
-                title: req.body.title,
-                compeleted: req.body.compeleted
+                title: data.title,
+                compeleted: data.compeleted
             }
         });
         res.json({
             success: true,
-            data: updatedTodo,
         })
     } catch (err) {
         res.json({

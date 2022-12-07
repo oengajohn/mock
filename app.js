@@ -13,6 +13,7 @@ const postsRoute = require('./routes/posts')
 const usersRoute = require('./routes/users')
 const todosRoute = require('./routes/todos')
 const commentsRoute = require('./routes/comments')
+const albumsRoute = require('./routes/albums')
 const photosRoute = require('./routes/photos')
 
 //Routes
@@ -21,6 +22,7 @@ app.use('/users', usersRoute);
 app.use('/todos', todosRoute);
 app.use('/comments', commentsRoute);
 app.use('/photos', photosRoute);
+app.use('/albums', albumsRoute);
 
 
 

@@ -1,18 +1,16 @@
 const express = require('express');
-const Comment = require('../model/Comment');
-const Post = require('../model/Post');
+const Album = require('../model/Album');
+const Photo = require('../model/Photo');
 
 const router = express.Router()
 
-//GET ALL POSTS
 router.get('/', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const searchKey = req.query.searchKey;
-
     try {
-        const totalCount = await Post.find().count();
-        const records = await Post.find()
+        const totalCount = await Album.find().count();
+        const records = await Album.find()
             .skip(start)
             .limit(limit);
         res.json({
@@ -28,14 +26,14 @@ router.get('/', async (req, res) => {
         })
     }
 });
-router.get('/:postId/comments/', async (req, res) => {
+router.get('/:albumId/photos/', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
-    const postId = parseInt(req.params.postId);
+    const albumId = parseInt(req.params.albumId);
 
     try {
-        const totalCount = await Comment.where("postId").equals(postId).count();
-        const records = await Comment.where("postId").equals(postId)
+        const totalCount = await Photo.where("albumId").equals(albumId).count();
+        const records = await Photo.where("albumId").equals(albumId)
             .skip(start)
             .limit(limit);
         res.json({
@@ -51,32 +49,29 @@ router.get('/:postId/comments/', async (req, res) => {
         })
     }
 });
-//SAVE POST
 router.post('/seed/', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
             data.forEach(async (record) => {
-                const recordToBeSaved = await new Post({
+                const objectToBeSaved = await new Album({
                     _id: record.id,
                     title: record.title,
-                    body: record.body,
                     userId: record.userId
                 });
-                await recordToBeSaved.save()
+                await objectToBeSaved.save()
             });
             res.json({
                 success: true
             })
 
         } else {
-            const recordToBeSaved = await new Post({
+            const record = await new Album({
                 _id: data.id,
                 title: data.title,
-                body: data.body,
                 userId: data.userId
             });
-            await recordToBeSaved.save()
+            await record.save()
             res.json({
                 success: true
             })
@@ -89,18 +84,16 @@ router.post('/seed/', async (req, res) => {
         })
     }
 
-
 });
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
-        const recordToBeSaved = await new Post({
+        const record = await new Album({
             _id: data.id,
             title: data.title,
-            body: data.body,
             userId: data.userId
         });
-        await recordToBeSaved.save()
+        await record.save()
         res.json({
             success: true
         })
@@ -111,10 +104,9 @@ router.post('/', async (req, res) => {
         })
     }
 });
-
-router.get('/:postId', async (req, res) => {
+router.get('/:albumId', async (req, res) => {
     try {
-        const record = await Post.findById(req.params.postId);
+        const record = await Album.findById(req.params.albumId);
         res.json({
             success: true,
             data: record
@@ -126,12 +118,10 @@ router.get('/:postId', async (req, res) => {
         })
     }
 })
-
-
-router.delete('/:postId', async (req, res) => {
+router.delete('/:albumId', async (req, res) => {
     try {
-        await Post.remove({
-            _id: req.params.postId
+        await Album.remove({
+            _id: req.params.albumId
         });
         res.json({
             success: true
@@ -143,21 +133,19 @@ router.delete('/:postId', async (req, res) => {
         })
     }
 })
-
-router.put('/:postId', async (req, res) => {
+router.put('/:albumId', async (req, res) => {
+    const data = req.body;
     try {
-        const data = req.body;
-        await Post.updateOne({
-            _id: req.params.postId
+        await Album.updateOne({
+            _id: req.params.albumId
         }, {
             $set: {
                 title: data.title,
-                description: data.description,
-                body: data.body
+                userId: data.userId
             }
         });
         res.json({
-            success: true,
+            success: true
         })
     } catch (err) {
         res.json({

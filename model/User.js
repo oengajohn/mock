@@ -15,6 +15,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
     },
     street: {
         type: String,

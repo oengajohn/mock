@@ -9,12 +9,12 @@ router.get('/', async (req, res) => {
     const searchKey = req.query.searchKey;
     try {
         const totalCount = await Photo.find().count();
-        const rcords = await Photo.find()
+        const records = await Photo.find()
             .skip(start)
             .limit(limit);
         res.json({
             totalCount: totalCount,
-            rows: rcords,
+            rows: records,
             success: true
         })
 
@@ -88,9 +88,10 @@ router.post('/', async (req, res) => {
 });
 router.get('/:photoId', async (req, res) => {
     try {
-        await Photo.findById(req.params.photoId);
+        const record = await Photo.findById(req.params.photoId);
         res.json({
-            success: true
+            success: true,
+            data: record
         })
     } catch (err) {
         res.json({
@@ -114,7 +115,7 @@ router.delete('/:photoId', async (req, res) => {
         })
     }
 })
-router.patch('/:photoId', async (req, res) => {
+router.put('/:photoId', async (req, res) => {
     const data = req.body;
     try {
         await Photo.updateOne({

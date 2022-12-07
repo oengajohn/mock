@@ -1,5 +1,8 @@
 const express = require('express');
 const User = require('../model/User');
+const Post = require('../model/Post');
+const Album = require('../model/Album');
+const Todo = require('../model/Todo');
 const router = express.Router()
 
 //GET ALL Users
@@ -9,13 +12,13 @@ router.get('/', async (req, res) => {
     const searchKey = req.query.searchKey;
 
     try {
-        const userCount = await User.find().count();
-        const users = await User.find()
+        const totalCount = await User.find().count();
+        const records = await User.find()
             .skip(start)
             .limit(limit);
         res.json({
-            totalCount: userCount,
-            rows: users,
+            totalCount: totalCount,
+            rows: records,
             success: true
         })
 
@@ -26,13 +29,82 @@ router.get('/', async (req, res) => {
         })
     }
 });
-//SAVE User
+router.get('/:userId/posts/', async (req, res) => {
+    const limit = parseInt(req.query._limit) || 10;
+    const start = parseInt(req.query._start) || 0;
+    const userId = parseInt(req.params.userId);
+
+    try {
+        const totalCount = await Post.where("userId").equals(userId).count();
+        const records = await Post.where("userId").equals(userId)
+            .skip(start)
+            .limit(limit);
+        res.json({
+            totalCount: totalCount,
+            rows: records,
+            success: true
+        })
+
+    } catch (err) {
+        res.json({
+            success: false,
+            msg: err.message,
+        })
+    }
+});
+router.get('/:userId/albums/', async (req, res) => {
+    const limit = parseInt(req.query._limit) || 10;
+    const start = parseInt(req.query._start) || 0;
+    const userId = parseInt(req.params.userId);
+
+    try {
+        const totalCount = await Album.where("userId").equals(userId).count();
+        const records = await Album.where("userId").equals(userId)
+            .skip(start)
+            .limit(limit);
+        res.json({
+            totalCount: totalCount,
+            rows: records,
+            success: true
+        })
+
+    } catch (err) {
+        res.json({
+            success: false,
+            msg: err.message,
+        })
+    }
+});
+router.get('/:userId/todos/', async (req, res) => {
+    const limit = parseInt(req.query._limit) || 10;
+    const start = parseInt(req.query._start) || 0;
+    const userId = parseInt(req.params.userId);
+
+    try {
+        const totalCount = await Todo.where("userId").equals(userId).count();
+        const records = await Todo.where("userId").equals(userId)
+            .skip(start)
+            .limit(limit);
+        res.json({
+            totalCount: totalCount,
+            rows: records,
+            success: true
+        })
+
+    } catch (err) {
+        res.json({
+            success: false,
+            msg: err.message,
+        })
+    }
+});
+
 router.post('/seed/', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
             data.forEach(async (user) => {
-                const userToBeSaved = await new User({
+                const objectToBeSaved = await new User({
                     _id: user.id,
                     name: user.name,
                     username: user.username,
@@ -50,7 +122,7 @@ router.post('/seed/', async (req, res) => {
                     companyBs: user.company.bs,
 
                 });
-                await userToBeSaved.save()
+                await objectToBeSaved.save()
 
             });
             res.json({
@@ -58,7 +130,7 @@ router.post('/seed/', async (req, res) => {
             })
 
         } else {
-            const user = await new User({
+            const recordToBeSaved = await new User({
                 _id: data.id,
                 name: data.name,
                 username: data.username,
@@ -77,7 +149,7 @@ router.post('/seed/', async (req, res) => {
 
             });
 
-            await user.save()
+            await recordToBeSaved.save()
             res.json({
                 success: true
             })
@@ -95,7 +167,7 @@ router.post('/seed/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
-        const user = await new User({
+        const recordToBeSaved = await new User({
             _id: data.id,
             name: data.name,
             username: data.username,
@@ -113,7 +185,7 @@ router.post('/', async (req, res) => {
             companyBs: data.companyBs,
 
         });
-        await user.save()
+        await recordToBeSaved.save()
         res.json({
             success: true
         });
@@ -130,10 +202,10 @@ router.post('/', async (req, res) => {
 //SPECIFIC User
 router.get('/:userId', async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const record = await User.findById(req.params.userId);
         res.json({
             success: true,
-            data: user,
+            data: record,
         })
     } catch (err) {
         res.json({
@@ -146,12 +218,11 @@ router.get('/:userId', async (req, res) => {
 //DELETE User
 router.delete('/:userId', async (req, res) => {
     try {
-        const removedUser = await User.remove({
+        await User.remove({
             _id: req.params.userId
         });
         res.json({
             success: true,
-            data: removedUser,
         })
     } catch (err) {
         res.json({
@@ -161,19 +232,31 @@ router.delete('/:userId', async (req, res) => {
     }
 })
 //Update User
-router.patch('/:userId', async (req, res) => {
+router.put('/:userId', async (req, res) => {
     try {
-        const updatedUser = await User.updateOne({
+        const data = req.body;
+        await User.updateOne({
             _id: req.params.userId
         }, {
             $set: {
-                title: req.body.title,
-                description: req.body.description
+                name: data.name,
+                username: data.username,
+                email: data.email,
+                street: data.street,
+                suite: data.suite,
+                city: data.city,
+                zipcode: data.zipcode,
+                lat: data.lat,
+                lng: data.lng,
+                phone: data.phone,
+                website: data.website,
+                companyName: data.companyName,
+                companyCatchPhrase: data.companyCatchPhrase,
+                companyBs: data.companyBs,
             }
         });
         res.json({
             success: true,
-            data: updatedUser,
         })
     } catch (err) {
         res.json({
