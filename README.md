@@ -11,6 +11,7 @@ forever start -c "npm start" ./
 - [/albums](/albums)
 - [/todos](/todos)
 - [/photos](/photos)
+- [/comments](/comments)
 - [/users/:userId/posts](/users/:userId/posts)
 - [/users/:userId/todos](/users/:userId/todos)
 - [/users/:userId/albums](/users/:userId/albums)
