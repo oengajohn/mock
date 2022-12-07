@@ -3,12 +3,19 @@ const mongoose = require('mongoose');
 const cors = require('cors')
 const morgan = require('morgan')
 const path = require('path')
-
+const bodyParser = require('body-parser');
 require('dotenv').config();
 //APP
 const app = express();
 //Middlewares
-app.use(express.json())
+
+app.use(bodyParser.json({
+    limit: '50mb'
+}));
+app.use(bodyParser.urlencoded({
+    limit: '50mb',
+    extended: true
+}));
 app.use(cors())
 app.use(morgan("tiny"))
 app.set('view engine', 'ejs');
