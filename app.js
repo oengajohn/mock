@@ -24,7 +24,7 @@ app.use('/photos', photosRoute);
 
 
 
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
     res.send({
         success: true,
         msg: "We are home"
