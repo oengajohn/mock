@@ -1,12 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors')
+const morgan = require('morgan')
+const path = require('path')
+
 require('dotenv').config();
 //APP
 const app = express();
 //Middlewares
 app.use(express.json())
 app.use(cors())
+app.use(morgan("tiny"))
+app.set('view engine', 'ejs');
+app.set("views", path.resolve(__dirname, "views"))
+
+//load assets
+app.use("/css", express.static(path.resolve(__dirname, "assets/css")))
+app.use("/js", express.static(path.resolve(__dirname, "assets/js")))
+app.use("/img", express.static(path.resolve(__dirname, "assets/img")))
 
 //import Routes
 const postsRoute = require('./routes/posts')
@@ -26,11 +37,8 @@ app.use('/albums', albumsRoute);
 
 
 
-app.get('/test', (req, res) => {
-    res.send({
-        success: true,
-        msg: "We are home"
-    })
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, "views/README.html"))
 });
 mongoose.connect(
     process.env.DB_CONNECTION, {
