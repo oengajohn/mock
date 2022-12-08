@@ -263,6 +263,35 @@ pre[data-line] .line-highlight[data-end]:after {
       <div class="mume markdown-preview  ">
       <h1 class="mume-header" id="node-mock-server">NODE Mock Server</h1>
 
+<h2 class="mume-header" id="requirements">Requirements</h2>
+
+<ul>
+<li><code>Node</code><a href="https://nodejs.org/en/download/">here</a></li>
+<li><code>MongoDB</code><a href="https://www.mongodb.com/try/download/community">here</a></li>
+<li><code>Docker</code> (optional) <a href="https://github.com/oengajohn/mock/blob/main/docker-compose.yaml">here</a></li>
+</ul>
+<h2 class="mume-header" id="setup">Setup</h2>
+
+<ul>
+<li>Sets up the <code>package.json</code></li>
+</ul>
+<pre data-role="codeBlock" data-info="console" class="language-console"><code>npm init -y
+</code></pre><ul>
+<li>Install packages</li>
+</ul>
+<pre data-role="codeBlock" data-info="console" class="language-console"><code> npm install cors dotenv express mongoose nodemon
+</code></pre><h2 class="mume-header" id="setup-our-start-command">Setup our start command</h2>
+
+<ul>
+<li>Add start command for nodemon in the <code>scripts</code> section</li>
+</ul>
+<pre data-role="codeBlock" data-info="json" class="language-json">  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;test&quot;</span><span class="token operator">:</span> <span class="token string">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;start&quot;</span><span class="token operator">:</span><span class="token string">&quot;nodemon app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+</pre><h2 class="mume-header" id="setup-our-app">Setup Our App</h2>
+
+<p>create <code>app.js</code></p>
 <pre data-role="codeBlock" data-info="console" class="language-console"><code>npm install forever -g
 forever start -c &quot;npm start&quot; ./
 </code></pre><h1 class="mume-header" id="enpoints">Enpoints</h1>
