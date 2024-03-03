@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
         })
     }
 });
-router.post('/seed/', async (req, res) => {
+router.post('/seed', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {

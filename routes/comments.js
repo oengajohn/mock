@@ -3,7 +3,7 @@ const Comment = require('../model/Comment');
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
+router.get('', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const searchKey = req.query.searchKey;
@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
         })
     }
 });
-router.post('/seed/', async (req, res) => {
+router.post('/seed', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
@@ -64,7 +64,7 @@ router.post('/seed/', async (req, res) => {
     }
 
 });
-router.post('/', async (req, res) => {
+router.post('', async (req, res) => {
     try {
         const data = req.body;
         const record = await new Comment({

@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
         })
     }
 });
-router.get('/:albumId/photos/', async (req, res) => {
+router.get('/:albumId/photos', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const albumId = parseInt(req.params.albumId);
@@ -49,7 +49,7 @@ router.get('/:albumId/photos/', async (req, res) => {
         })
     }
 });
-router.post('/seed/', async (req, res) => {
+router.post('/seed', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {

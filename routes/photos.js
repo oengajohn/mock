@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
         })
     }
 });
-router.post('/seed/', async (req, res) => {
+router.post('/seed', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
@@ -65,7 +65,7 @@ router.post('/seed/', async (req, res) => {
     }
 
 });
-router.post('/', async (req, res) => {
+router.post('', async (req, res) => {
     try {
         const data = req.body;
         const record = await new Photo({

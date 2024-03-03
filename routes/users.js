@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
         })
     }
 });
-router.get('/:userId/posts/', async (req, res) => {
+router.get('/:userId/posts', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const userId = parseInt(req.params.userId);
@@ -52,7 +52,7 @@ router.get('/:userId/posts/', async (req, res) => {
         })
     }
 });
-router.get('/:userId/albums/', async (req, res) => {
+router.get('/:userId/albums', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const userId = parseInt(req.params.userId);
@@ -75,7 +75,7 @@ router.get('/:userId/albums/', async (req, res) => {
         })
     }
 });
-router.get('/:userId/todos/', async (req, res) => {
+router.get('/:userId/todos', async (req, res) => {
     const limit = parseInt(req.query._limit) || 10;
     const start = parseInt(req.query._start) || 0;
     const userId = parseInt(req.params.userId);
@@ -99,7 +99,7 @@ router.get('/:userId/todos/', async (req, res) => {
     }
 });
 
-router.post('/seed/', async (req, res) => {
+router.post('/seed', async (req, res) => {
     try {
         const data = req.body;
         if (Array.isArray(data)) {
