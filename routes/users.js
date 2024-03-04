@@ -7,8 +7,8 @@ const router = express.Router()
 
 //GET ALL Users
 router.get('/', async (req, res) => {
-    const limit = parseInt(req.query._limit) || 10;
-    const start = parseInt(req.query._start) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const start = parseInt(req.query.start) || 0;
     const searchKey = req.query.searchKey;
 
     try {
@@ -30,8 +30,8 @@ router.get('/', async (req, res) => {
     }
 });
 router.get('/:userId/posts', async (req, res) => {
-    const limit = parseInt(req.query._limit) || 10;
-    const start = parseInt(req.query._start) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const start = parseInt(req.query.start) || 0;
     const userId = parseInt(req.params.userId);
 
     try {
@@ -53,8 +53,8 @@ router.get('/:userId/posts', async (req, res) => {
     }
 });
 router.get('/:userId/albums', async (req, res) => {
-    const limit = parseInt(req.query._limit) || 10;
-    const start = parseInt(req.query._start) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const start = parseInt(req.query.start) || 0;
     const userId = parseInt(req.params.userId);
 
     try {
@@ -76,8 +76,8 @@ router.get('/:userId/albums', async (req, res) => {
     }
 });
 router.get('/:userId/todos', async (req, res) => {
-    const limit = parseInt(req.query._limit) || 10;
-    const start = parseInt(req.query._start) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const start = parseInt(req.query.start) || 0;
     const userId = parseInt(req.params.userId);
 
     try {

@@ -5,8 +5,8 @@ const router = express.Router()
 
 
 router.get('/', async (req, res) => {
-    const limit = parseInt(req.query._limit) || 10;
-    const start = parseInt(req.query._start) || 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const start = parseInt(req.query.start) || 0;
     const searchKey = req.query.searchKey;
 
     try {
