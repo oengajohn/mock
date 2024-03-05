@@ -7,13 +7,23 @@ const router = express.Router()
 router.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const start = parseInt(req.query.start) || 0;
-    const searchKey = req.query.searchKey;
+    const searchKey = req.query.userId;
 
     try {
         const totalCount = await Todo.find().count();
-        const records = await Todo.find()
-            .skip(start)
-            .limit(limit);
+        let records;
+        if (searchKey) {
+            records = await Todo.find({
+                userId: searchKey
+            })
+                .skip(start)
+                .limit(limit);
+        } else {
+            records = await Todo.find()
+                .skip(start)
+                .limit(limit);
+        }
+     
         res.json({
             totalCount: totalCount,
             rows: records,
