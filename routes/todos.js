@@ -134,7 +134,7 @@ router.put('/:todoId', async (req, res) => {
         }, {
             $set: {
                 title: data.title,
-                compeleted: data.compeleted
+                completed: data.completed
             }
         });
         res.json({
