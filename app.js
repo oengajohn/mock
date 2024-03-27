@@ -41,7 +41,7 @@ app.use('/posts', postsRoute);
 app.use('/requests', requestsRoute);
 app.use('/users', usersRoute);
 app.use('/todos', todosRoute);
-app.use('/routes', logsRoute);
+app.use('/logs', logsRoute);
 app.use('/comments', commentsRoute);
 app.use('/photos', photosRoute);
 app.use('/albums', albumsRoute);
