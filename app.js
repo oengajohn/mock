@@ -31,6 +31,7 @@ const postsRoute = require('./routes/posts')
 const requestsRoute = require('./routes/requests')
 const usersRoute = require('./routes/users')
 const todosRoute = require('./routes/todos')
+const logsRoute = require('./routes/logs')
 const commentsRoute = require('./routes/comments')
 const albumsRoute = require('./routes/albums')
 const photosRoute = require('./routes/photos')
@@ -40,6 +41,7 @@ app.use('/posts', postsRoute);
 app.use('/requests', requestsRoute);
 app.use('/users', usersRoute);
 app.use('/todos', todosRoute);
+app.use('/routes', logsRoute);
 app.use('/comments', commentsRoute);
 app.use('/photos', photosRoute);
 app.use('/albums', albumsRoute);
